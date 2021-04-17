@@ -2,6 +2,7 @@ from requests import get
 import time
 import datetime
 import os
+import logging
 
 env = ['APP_DOMAIN', 'APP_HOST', 'APP_PASSWORD',]
 
@@ -21,6 +22,6 @@ while True:
     if ip != prev_ip:
         res = get(f'https://dynamicdns.park-your-domain.com/update?host={host}&domain={domain}&password={password}&ip={ip}')
 
-        print(f'{datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")}: NEW public IP address: {ip} - UPDATE request sent.')
+        logging.info(f'{datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")}: NEW public IP address: {ip} - UPDATE request sent.')
 
     time.sleep(3)
