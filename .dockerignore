@@ -1,0 +1,7 @@
+# GIT AND CACHE
+.git
+.cache
+
+# MARKDOWN
+*.md
+**/*.class
