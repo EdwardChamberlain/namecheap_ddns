@@ -1,23 +1,22 @@
 from requests import get
 import time
-import datetime
 import os
 
 import logging
 log_format = "%(asctime)s::%(levelname)s::%(filename)s::%(message)s"
-logging.basicConfig(level=logging.INFO, format=log_format)
-
+logging.basicConfig(
+    level=os.getenv('APP_LOG_LEVEL') or 'INFO',
+    format=log_format,
+)
 logging.info("Starting Script")
 
-env = ['APP_DOMAIN', 'APP_HOST', 'APP_PASSWORD',]
-for e in env:
-    assert e in os.environ, f'You must provide an "{e}" variable'
 
-domain = os.environ['APP_DOMAIN']
-host = os.environ['APP_HOST']
-password = os.environ['APP_PASSWORD']
-
-logging.info("Enviroment Variables Present")
+env = {'APP_DOMAIN', 'APP_HOST', 'APP_PASSWORD'}
+missing_vars = env - set(os.environ.keys())
+if missing_vars:
+    logging.critical(f"Missing environ: <{', '.join(missing_vars)}>")
+    exit()
+logging.debug("Enviroment Variables Present")
 
 ip = None
 while True:
@@ -26,7 +25,7 @@ while True:
     logging.debug(f"IP Found as {ip}")
 
     if ip != prev_ip:
-        res = get(f'https://dynamicdns.park-your-domain.com/update?host={host}&domain={domain}&password={password}&ip={ip}')
+        res = get(f"https://dynamicdns.park-your-domain.com/update?host={os.environ['APP_HOST']}&domain={os.environ['APP_DOMAIN']}&password={os.environ['APP_PASSWORD']}&ip={ip}")
         logging.info(f'NEW public IP address: {ip} - UPDATE request sent.')
 
     else:
