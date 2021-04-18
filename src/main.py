@@ -1,15 +1,14 @@
 from requests import get
 import time
 import os
+import re
 
 import logging
-log_format = "%(asctime)s::%(levelname)s::%(filename)s::%(message)s"
 logging.basicConfig(
     level=os.getenv('APP_LOG_LEVEL') or 'INFO',
-    format=log_format,
+    format="%(asctime)s::%(levelname)s::%(filename)s::%(message)s",
 )
 logging.info("Starting Script")
-
 
 env = {'APP_DOMAIN', 'APP_HOST', 'APP_PASSWORD'}
 missing_vars = env - set(os.environ.keys())
@@ -25,10 +24,17 @@ while True:
     logging.debug(f"IP Found as {ip}")
 
     if ip != prev_ip:
+        logging.info(f'NEW public IP address: {ip} - sending UPDATE request.')
+
         res = get(f"https://dynamicdns.park-your-domain.com/update?host={os.environ['APP_HOST']}&domain={os.environ['APP_DOMAIN']}&password={os.environ['APP_PASSWORD']}&ip={ip}")
-        logging.info(f'NEW public IP address: {ip} - UPDATE request sent.')
+        error = re.search(r'(?:(?:<ResponseString>)(.+)(?:<\/ResponseString>))', res.text)
 
+        if error:
+            logging.error(f"an error occured: <{error[1]}>")
+        else:
+            logging.info(f"IP updated successfully: {ip}")
+        
     else:
-        logging.debug(f"No IP update required. Still {ip}")
+        logging.debug(f"No IP update required. Still: {ip}")
 
-    time.sleep(3)
+    time.sleep(float(os.getenv('APP_POLL_TIME') or 60))
