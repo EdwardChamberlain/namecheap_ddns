@@ -1,35 +1,27 @@
 from requests import get
 import time
-import datetime
 import os
-
+import re
 import logging
-log_format = "%(asctime)s::%(levelname)s::%(filename)s::%(message)s"
-logging.basicConfig(level=logging.INFO, format=log_format)
+
+import config
+
 
 logging.info("Starting Script")
 
-env = ['APP_DOMAIN', 'APP_HOST', 'APP_PASSWORD',]
-for e in env:
-    assert e in os.environ, f'You must provide an "{e}" variable'
+missing_vars = config.required_vars - set(os.environ.keys())
+if missing_vars:
+    logging.critical(f"Missing environ: <{', '.join(missing_vars)}>")
+    exit()
 
-domain = os.environ['APP_DOMAIN']
-host = os.environ['APP_HOST']
-password = os.environ['APP_PASSWORD']
 
-logging.info("Enviroment Variables Present")
-
-ip = None
 while True:
-    prev_ip = ip
-    ip = get('https://api.ipify.org').text
-    logging.debug(f"IP Found as {ip}")
+    res = get(f"https://dynamicdns.park-your-domain.com/update?host={os.environ['APP_HOST']}&domain={os.environ['APP_DOMAIN']}&password={os.environ['APP_PASSWORD']}")
+    error = re.search(r'(?:(?:<ResponseString>)(.+)(?:<\/ResponseString>))', res.text)
 
-    if ip != prev_ip:
-        res = get(f'https://dynamicdns.park-your-domain.com/update?host={host}&domain={domain}&password={password}&ip={ip}')
-        logging.info(f'NEW public IP address: {ip} - UPDATE request sent.')
-
+    if error:
+        logging.error(f"an error occured: <{error[1]}>")
     else:
-        logging.debug(f"No IP update required. Still {ip}")
-
-    time.sleep(3)
+        logging.info(f"IP updated successfully")
+        
+    time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
