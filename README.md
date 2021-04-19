@@ -17,3 +17,15 @@ docker run \
 -e APP_PASSWORD='your ddns password' \
 edchamberlain/namecheap_ddns:latest
 ```
+
+Usage (optional args):
+```
+docker run \
+-e APP_HOST='your host' \
+-e APP_DOMAIN='your domain' \
+-e APP_PASSWORD='your ddns password' \
+-e APP_UPDATE_TIME='time between updates, e.g: '60'' \
+-e APP_LOG_LEVEL='Log Level'
+edchamberlain/namecheap_ddns:latest
+```
+
