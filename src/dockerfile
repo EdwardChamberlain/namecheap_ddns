@@ -1,5 +1,6 @@
 FROM python:3.8
 COPY src/main.py /tmp/
+COPY config.py /tmp/
 RUN pip install requests
 RUN export PYTHONUNBUFFERED=0
 CMD ["python", "-u", "/tmp/main.py"]
