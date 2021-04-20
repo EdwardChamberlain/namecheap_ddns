@@ -14,7 +14,7 @@ def update_ip(host, domain, password):
     if error:
         logging.error(f"an error occured: <{error[1]}>")
     else:
-        logging.info(f"IP updated successfully")
+        logging.info(f"IP for {host}.{domain} updated successfully")
 
 
 logging.info("Starting Script")
