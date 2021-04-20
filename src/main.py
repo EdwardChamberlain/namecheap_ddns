@@ -12,7 +12,7 @@ def update_ip(host, domain, password):
     error = re.search(r'(?:(?:<ResponseString>)(.+)(?:<\/ResponseString>))', res.text)
 
     if error:
-        logging.error(f"an error occured: <{error[1]}>")
+        raise RuntimeError(error[1])
     else:
         logging.info(f"IP for {host}.{domain} updated successfully")
 
@@ -24,11 +24,24 @@ if missing_vars:
     logging.critical(f"Missing environ: <{', '.join(missing_vars)}>")
     exit()
 
+hosts = os.environ['APP_HOST'].split(';')
+domains = os.environ['APP_DOMAIN'].split(';')
+passwords = os.environ['APP_PASSWORD'].split(';')
+if not (len(hosts) == len(domains) == len(passwords)):
+    logging.error("Mismatched inputs. You must supply the same number of hosts, domains, and passwords.")
+    exit()
+targets = list(zip(hosts, domains, passwords))
+
 
 while True:
-    update_ip(
-        host=os.environ['APP_HOST'],
-        domain=os.environ['APP_DOMAIN'],
-        password=os.environ['APP_PASSWORD'],
-    )  
+    for i in targets:
+        try:
+            update_ip(
+                host=i[0],
+                domain=i[1],
+                password=i[2],
+            )
+        except Exception as e:
+            logging.error(f"{i[0]}.{i[1]}: {e}")
+
     time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
