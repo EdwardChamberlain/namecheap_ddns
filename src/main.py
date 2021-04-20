@@ -12,18 +12,20 @@ def update_ip(host, domain, password):
     error = re.search(r'(?:(?:<ResponseString>)(.+)(?:<\/ResponseString>))', res.text)
 
     if error:
-        raise RuntimeError(error[1])
+        logging.error(f"Error updating: {host}.{domain}: {error[1]}")
     else:
         logging.info(f"IP for {host}.{domain} updated successfully")
 
 
 logging.info("Starting Script")
 
+# CHECK FOR MISSING VARS
 missing_vars = config.required_vars - set(os.environ.keys())
 if missing_vars:
     logging.critical(f"Missing environ: <{', '.join(missing_vars)}>")
     exit()
 
+# CHECK FOR MIS MATCHED DATA
 hosts = os.environ['APP_HOST'].split(';')
 domains = os.environ['APP_DOMAIN'].split(';')
 passwords = os.environ['APP_PASSWORD'].split(';')
@@ -42,6 +44,6 @@ while True:
                 password=i[2],
             )
         except Exception as e:
-            logging.error(f"{i[0]}.{i[1]}: {e}")
+            logging.error(e)
 
     time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
