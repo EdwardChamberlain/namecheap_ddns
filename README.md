@@ -29,3 +29,15 @@ docker run \
 edchamberlain/namecheap_ddns:latest
 ```
 
+To pass multiple domains, hosts, or passwords you can use a semi-colon seperated list. For example to update `host1` and `host2` of `myDomain` you would need to pass:
+
+```
+...
+-e APP_HOST='host1;host2' \
+-e APP_DOMAIN='myDomain;myDomain' \
+-e APP_PASSWORD='myPassword;myPassword' \
+...
+```
+
+**Note:** the repetition of both `myDomain` and `myPassword`. You __must__ include the same number of each parameter - repetition is allowed.
+
