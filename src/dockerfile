@@ -1,5 +1,5 @@
 FROM python:3.8
-COPY src/ /tmp/
+COPY src/ /app/
 RUN pip install requests
 RUN export PYTHONUNBUFFERED=0
-CMD ["python", "-u", "/tmp/main.py"]
+CMD ["python", "-u", "/app/main.py"]
