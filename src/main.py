@@ -21,7 +21,7 @@ def update_ip(host, domain, password):
     if error:
         logging.error(f"Error updating: {host}.{domain}: {error}")
     else:
-        logging.info(f"IP for {host}.{domain} updated successfully")
+        logging.info(f"IP for {host}.{domain} updated successfully - [You are running a development build of this container]")
 
 
 logging.info("Starting Script")
