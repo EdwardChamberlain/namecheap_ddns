@@ -8,20 +8,10 @@ import config
 
 
 def update_ip(host, domain, password):
-    try:
-        res = get(f'https://dynamicdns.park-your-domain.com/update?host={host}&domain={domain}&password={password}')
-        
-        error = re.search(r'(?:(?:<ResponseString>)(.+)(?:<\/ResponseString>))', res.text)
-        if error:
-            error = error[1]
+    res = get(f'https://dynamicdns.park-your-domain.com/update?host={host}&domain={domain}&password={password}')
+    res.raise_for_status()  # raise any errors
 
-    except Exception as e:
-        error = e
-
-    if error:
-        logging.error(f"Error updating: {host}.{domain}: {error}")
-    else:
-        logging.info(f"IP for {host}.{domain} updated successfully")
+    logging.info(f"IP for {host}.{domain} updated successfully")
 
 
 def get_targets():
