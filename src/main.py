@@ -33,7 +33,7 @@ def main():
     # CHECK FOR MISSING VARS
     missing_vars = config.required_vars - set(os.environ.keys())
     if missing_vars:
-        logging.error(f"Missing environ: <{', '.join(missing_vars)}>")
+        logging.error(f"Missing enviroment variable: <{', '.join(missing_vars)}>")
         exit()
 
     targets = get_targets()
