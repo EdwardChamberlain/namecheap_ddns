@@ -1,4 +1,4 @@
-name: Docker Image CI
+name: Push to Branch Name
 
 on: workflow_dispatch
 
