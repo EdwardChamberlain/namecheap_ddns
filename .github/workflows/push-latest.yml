@@ -1,4 +1,4 @@
-name: Push to Branch Name
+name: Push to Latest
 
 on: workflow_dispatch
 
@@ -16,7 +16,6 @@ jobs:
         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
-
     - name: Build the Docker image
       run: docker build . --file src/dockerfile --tag edchamberlain/namecheap_ddns:${{github.ref_name}}
     
