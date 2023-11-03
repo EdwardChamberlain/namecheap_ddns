@@ -24,14 +24,6 @@ def update_ip(host, domain, password):
         logging.info(f"IP for {host}.{domain} updated successfully")
 
 
-logging.info("Starting Script")
-
-# CHECK FOR MISSING VARS
-missing_vars = config.required_vars - set(os.environ.keys())
-if missing_vars:
-    logging.critical(f"Missing environ: <{', '.join(missing_vars)}>")
-    exit()
-
 def get_targets():
     hosts = os.environ['APP_HOST'].split(';')
     domains = os.environ['APP_DOMAIN'].split(';')
@@ -44,7 +36,17 @@ def get_targets():
 
     return list(zip(hosts, domains, passwords))
 
-targets = get_targets()
+
+def main():
+    logging.info("Starting Script")
+
+    # CHECK FOR MISSING VARS
+    missing_vars = config.required_vars - set(os.environ.keys())
+    if missing_vars:
+        logging.error(f"Missing environ: <{', '.join(missing_vars)}>")
+        exit()
+
+    targets = get_targets()
 
 
 while True:
