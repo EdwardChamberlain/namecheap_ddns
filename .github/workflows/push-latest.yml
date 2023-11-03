@@ -17,7 +17,7 @@ jobs:
       run: |
         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
     - name: Build the Docker image
-      run: docker build . --file src/dockerfile --tag edchamberlain/namecheap_ddns:${{github.ref_name}}
+      run: docker build . --file src/dockerfile --tag edchamberlain/namecheap_ddns:latest
     
     - name: Docker Push
-      run: docker push edchamberlain/namecheap_ddns:${{github.ref_name}}
+      run: docker push edchamberlain/namecheap_ddns:latest
