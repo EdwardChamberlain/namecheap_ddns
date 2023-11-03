@@ -33,13 +33,18 @@ if missing_vars:
     exit()
 
 # CHECK FOR MIS MATCHED DATA
-hosts = os.environ['APP_HOST'].split(';')
-domains = os.environ['APP_DOMAIN'].split(';')
-passwords = os.environ['APP_PASSWORD'].split(';')
-if not (len(hosts) == len(domains) == len(passwords)):
-    logging.error("Mismatched inputs. You must supply the same number of hosts, domains, and passwords.")
-    exit()
-targets = list(zip(hosts, domains, passwords))
+def get_targets():
+    hosts = os.environ['APP_HOST'].split(';')
+    domains = os.environ['APP_DOMAIN'].split(';')
+    passwords = os.environ['APP_PASSWORD'].split(';')
+
+    if not (len(hosts) == len(domains) == len(passwords)):
+        logging.error("Mismatched inputs. You must supply the same number of hosts, domains, and passwords.")
+        exit()
+
+    return list(zip(hosts, domains, passwords))
+
+targets = get_targets()
 
 
 while True:
