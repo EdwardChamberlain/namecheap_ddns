@@ -48,16 +48,18 @@ def main():
 
     targets = get_targets()
 
+    while True:
+        for i in targets:
+            try:
+                update_ip(
+                    host=i[0],
+                    domain=i[1],
+                    password=i[2],
+                )
+            except Exception as e:
+                logging.error(e)
 
-while True:
-    for i in targets:
-        try:
-            update_ip(
-                host=i[0],
-                domain=i[1],
-                password=i[2],
-            )
-        except Exception as e:
-            logging.error(e)
+        time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
 
-    time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
+if __name__ == '__main__':
+    main()
