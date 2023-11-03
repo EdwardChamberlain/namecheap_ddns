@@ -32,12 +32,12 @@ if missing_vars:
     logging.critical(f"Missing environ: <{', '.join(missing_vars)}>")
     exit()
 
-# CHECK FOR MIS MATCHED DATA
 def get_targets():
     hosts = os.environ['APP_HOST'].split(';')
     domains = os.environ['APP_DOMAIN'].split(';')
     passwords = os.environ['APP_PASSWORD'].split(';')
 
+    # Check for mismatched data
     if not (len(hosts) == len(domains) == len(passwords)):
         logging.error("Mismatched inputs. You must supply the same number of hosts, domains, and passwords.")
         exit()
