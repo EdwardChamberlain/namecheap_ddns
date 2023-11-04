@@ -34,7 +34,7 @@ def get_targets():
 def main():
     logging.info("Starting Script")
 
-    # CHECK FOR MISSING VARS
+    # Check for missing vars
     missing_vars = config.required_vars - set(os.environ.keys())
     if missing_vars:
         logging.error(f"Missing enviroment variable: <{', '.join(missing_vars)}>")
@@ -42,6 +42,7 @@ def main():
 
     targets = get_targets()
 
+    # Main loop
     while True:
         for host, domain, password in targets:
             try:
