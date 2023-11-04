@@ -1,4 +1,4 @@
-name: Push to Branch Name
+name: Push to Dev
 
 on: workflow_dispatch
 
