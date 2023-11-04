@@ -43,15 +43,15 @@ def main():
     targets = get_targets()
 
     while True:
-        for i in targets:
+        for host, domain, password in targets:
             try:
                 update_ip(
-                    host=i[0],
-                    domain=i[1],
-                    password=i[2],
+                    host=host,
+                    domain=domain,
+                    password=password,
                 )
             except Exception as e:
-                logging.error(f"Error updating: {i[0]}.{i[1]}: {e}")
+                logging.error(f"Error updating: {host}.{domain}: {e}")
             
         time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
 
