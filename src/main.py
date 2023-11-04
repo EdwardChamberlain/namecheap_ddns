@@ -55,5 +55,6 @@ def main():
             
         time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
 
+
 if __name__ == '__main__':
     main()
