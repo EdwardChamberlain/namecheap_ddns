@@ -11,6 +11,10 @@ def update_ip(host, domain, password):
     res = get(f'https://dynamicdns.park-your-domain.com/update?host={host}&domain={domain}&password={password}')
     res.raise_for_status()  # raise any errors
 
+    error = re.search(r'(?:(?:<ResponseString>)(.+)(?:<\/ResponseString>))', res.text)
+    if error:
+        raise Exception(error[1])
+
     logging.info(f"IP for {host}.{domain} updated successfully")
 
 
