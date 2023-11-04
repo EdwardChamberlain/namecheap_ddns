@@ -1,4 +1,4 @@
-FROM python:3.11-slim
+FROM python:3.12-alpine
 COPY src/ /app/
 RUN pip install requests
 RUN export PYTHONUNBUFFERED=0
