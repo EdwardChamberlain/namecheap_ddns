@@ -51,9 +51,7 @@ def main():
                     password=i[2],
                 )
             except Exception as e:
-                logging.error(e)
-
-        time.sleep(float(os.getenv('APP_UPDATE_TIME') or 60))
+                logging.error(f"Error updating: {i[0]}.{i[1]}: {e}")
 
 if __name__ == '__main__':
     main()
